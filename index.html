@@ -10,10 +10,104 @@
 
 <body>
 
-    <h1>クリッカーゲーム</h1>
+
+<!-- 実績ボタン -->
+<button id="achievement-button">実績</button>
+
+<!-- 実績一覧の画面 -->
+<div id="achievement-modal" style="display: none;">
+  <button id="close-achievement-modal">×</button>
+  <h2><span class="p-font"> achievement</span></h2>
+  <ul>
+    <p><span class="p-font">cleared</span>  <span id="実績クリア数">0</span>/3</p>
+    <p>次回起動時に実績の進捗が更新されます。仕様です。</p>   
+    <p>≪<span id="実績1">未</span>≫クリック数を10000000以上得よ。</p>
+    <p>≪<span id="実績2">未</span>≫クリックパワーを10000以上得よ。</p>
+    <p>≪<span id="実績3">未</span>≫しぐしぐパワーを100以上得よ。</p>
+  </ul>
+</div>
+
+<style>
+  /* 実績一覧のモーダル用スタイル */
+  #achievement-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    width: 800px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    display: none; /* 初期状態は非表示 */
+  }
+
+  /* 実績ボタン用スタイル */
+  #achievement-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 9998;
+    padding: 10px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* 実績一覧のモーダルが表示されているときの背景用スタイル */
+  body.modal-open {
+    overflow: hidden;
+  }
+
+  /* ×ボタン用スタイル */
+  #close-achievement-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #000000;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+    /* 実績一覧のモーダルが表示されているときの背景用スタイル */
+    body.modal-open {
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.4); /* 半透明の背景色 */
+  }
+  
+</style>
+
+<script>
+    
+// 実績ボタンをクリックしたら、実績一覧の画面を表示する
+const achievementButton = document.getElementById("achievement-button");
+achievementButton.addEventListener("click", function() {
+  const achievementModal = document.getElementById("achievement-modal");
+  document.body.classList.add("modal-open");
+  achievementModal.style.display = "block";
+});
+
+// ×ボタンをクリックしたら、実績一覧の画面を非表示にする
+const closeAchievementModal = document.getElementById("close-achievement-modal");
+closeAchievementModal.addEventListener("click", function() {
+  const achievementModal = document.getElementById("achievement-modal");
+  document.body.classList.remove("modal-open");
+  achievementModal.style.display = "none";
+});
+
+</script>
+
+
+    <h1> <span class="p-font">クリッカーゲーム</span></h1>
     <p>クリック数: <span id="clicks">0</span></p>
     <p>現在のクリックパワー: <span id="clickPower">1</span></p>
-    <p>現在のしぐしぐパワー: <span id="sigusiguPower">0</span></p>
+    <p>現在のしぐしぐパワー: <span id="sigusiguPower">0</span>×<span id="sigusiguPowerbonus">1</span>倍</p>
+
+
     <button id="clicker" class="btnripple" >クリック！</button>
     <hr>
 
@@ -27,6 +121,14 @@
         <input type="range" id="se_volume" min="0" max="1" step="0.1" value="0.5">
         <span id="se_vol_range">0.5</span>
     </p>
+
+   <button id="omikuji-button" class="btnripple">おみくじを引く</button>
+   <div class="omikuji">
+     <div class="omikuji-paper">
+       <div class="omikuji-message"></div>
+     </div>
+   </div>
+
 
     <h>アイテムショップ</h>
     <div class="item">

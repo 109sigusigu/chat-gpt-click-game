@@ -1,10 +1,25 @@
 /* style.css */
+@font-face {
+  font-family: 'My Custom Font';
+  src: url('font/Planetarium.otf') format('truetype');
+}
+
+@font-face {
+  font-family: 'My Custom Font2';
+  src: url('font/ShipporiMinchoB1-Medium.ttf') format('truetype');
+}
+
 body {
-    font-family: "Arial", sans-serif;
-    text-align: center;
-    background-color:rgba(0, 0, 0, 0);
-  }
-  
+  font-size: 24px;
+  font-family: 'My Custom Font2', sans-serif;
+  text-align: center;
+  background: linear-gradient(to bottom right, #ff00b3, #002fff);
+}
+
+.p-font {
+  font-family: 'My Custom Font', sans-serif;
+}
+
   h1 {
     margin-bottom: 30px;
   }
@@ -93,4 +108,51 @@ border-radius: 25px;
   transform: scale(0, 0);
   transition: 0s;
   opacity: 0.3;
+}
+
+/* グリッド */
+.grid {
+  background: #e1f3ff;
+  background-image:
+    linear-gradient(#c8e4ff 1px, transparent 0),
+    linear-gradient(90deg, #c8e4ff 1px, transparent 0);
+  background-size: 30px 30px;
+}
+
+
+/* CSSコード */
+.omikuji {
+  position: relative;
+  width: 200px;
+  height: 300px;
+  margin: 50px auto;
+}
+
+.omikuji-paper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #f5deb3;
+  border: 5px solid #8b4513;
+  box-sizing: border-box;
+  transform-origin: center bottom;
+  animation: paper-fall 1s forwards;
+}
+
+.omikuji-message {
+  padding: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+}
+
+@keyframes paper-fall {
+  0% {
+    transform: rotateX(-90deg);
+  }
+  100% {
+    transform: rotateX(0);
+  }
 }

@@ -4,7 +4,7 @@ const resetButton = document.getElementById("reset");
 const clicksCount = document.getElementById("clicks");
 const clickPowerDisplay = document.getElementById("clickPower");
 const sigusiguPowerDisplay = document.getElementById("sigusiguPower");
-
+const spb = document.getElementById("sigusiguPowerbonus");
 
 const buyItemButtons = [
   document.getElementById("buyItem1"),
@@ -47,6 +47,7 @@ let itemPrices =  JSON.parse(localStorage.getItem("itemPrices")) ||[10, 100, 100
 let sigusiguPrices =  JSON.parse(localStorage.getItem("sigusiguPrices")) ||[100];
 let itemPowerUps = parseInt(localStorage.getItem("itemPowerUps")) ||[5, 50, 500, 5000];
 let sigusiguPowerUps = parseInt(localStorage.getItem("sigusiguPowerUps")) ||[1];
+let sigusiguPowerbonus = parseInt(localStorage.getItem("sigusiguPowerbonus")) ||[1];
 
 // ゲームの状態を保存する関数
 function saveGameState() {
@@ -67,12 +68,11 @@ clickerButton.addEventListener("click", () => {
   saveGameState();
 });
 
-// しぐしぐ生産のイベントリスナー　パワーと価格情報の更新も
+// しぐしぐ生産のイベントリスナー　パワーと価格情報の更新も 
 function sigu() {
-  clicks += sigusiguPower;
+  clicks += sigusiguPower*sigusiguPowerbonus;
   clicksCount.innerText = clicks;
   clickPowerDisplay.innerText = clickPower;
-  sigusiguPowerDisplay.innerText = sigusiguPower;
   sigusiguPowerDisplay.innerText = sigusiguPower;
   updateButtonStates();
   saveGameState();
@@ -87,7 +87,65 @@ setInterval(function() {
   document.getElementById("item3Cost").innerHTML = itemPrices[2]; 
   document.getElementById("item4Cost").innerHTML = itemPrices[3]; 
   document.getElementById("human1Cost").innerHTML = sigusiguPrices[0]; 
-}, 100); // 0.1秒ごとに数値を更新する
+}, 100); 
+
+
+//実績判定　よく分からないけど動く 
+
+const achievements = [
+  { id: "実績1", target: clicks, threshold: 10000000 },
+  { id: "実績2", target: clickPower, threshold: 10000 },
+  { id: "実績3", target: sigusiguPower, threshold: 100 },
+];
+
+let clearedCount = 0;
+
+for (const achievement of achievements) {
+  if (achievement.target >= achievement.threshold && !window[`${achievement.id}Cleared`]) {
+    const element = document.getElementById(achievement.id);
+    element.textContent = "済";
+    window[`${achievement.id}Cleared`] = true;
+    clearedCount++;
+    sigusiguPowerbonus++;
+    const achievementcount = document.getElementById("実績クリア数");
+    achievementcount.textContent = clearedCount;
+    spb.textContent = sigusiguPowerbonus;
+  }
+}
+
+// JavaScriptコード
+var messages = [
+  '大吉',
+  '中吉',
+  '小吉',
+  '吉',
+  '末吉',
+  '凶',
+  '大吉だよ',
+  '中吉だよ',
+  '小吉だよ',
+  '吉だよ',
+  '末吉だよ',
+  '凶だよ',
+];
+
+var button = document.querySelector('#omikuji-button');
+var messageElement = document.querySelector('.omikuji-message');
+
+button.addEventListener('click', function() {
+  var messageIndex = Math.floor(Math.random() * messages.length); // ランダムなインデックスを生成
+  var message = messages[messageIndex]; // メッセージを取得
+  messageElement.textContent = message; // メッセージを表示
+  animatePaper(); // おみくじの紙をめくるアニメーションを開始
+});
+
+function animatePaper() {
+  var paperElement = document.querySelector('.omikuji-paper');
+  paperElement.style.animation = 'none'; // アニメーションを一時停止
+  paperElement.offsetHeight; // アニメーションをリセットするために高さを取得する
+  paperElement.style.animation = 'paper-fall 1s forwards'; // アニメーションを再開
+}
+
 
 
 // 各アイテム購入ボタンのイベントリスナー
@@ -175,6 +233,14 @@ buybutton.forEach((button) => {
   });
 });
 
+const sound3 = new Audio('audio/taiko.mp3');
+const omikuzibutton = document.getElementById('omikuji-button');
+omikuzibutton.addEventListener('click', () => {
+  sound3.currentTime = 0;
+  sound3.play();
+});
+
+
 // BGMボリューム設定
 let belem_volume = document.getElementById("bgm_volume");
 let belem_range = document.getElementById("bgm_vol_range");
@@ -192,10 +258,14 @@ let elem_range = document.getElementById("se_vol_range");
 
 sound1.volume = elem_volume.value;
 sound2.volume = elem_volume.value;
+sound3.volume = elem_volume.value;
+
 
 elem_volume.addEventListener("change", function(){
 	sound1.volume = elem_volume.value;
   sound2.volume = elem_volume.value;
+  sound3.volume = elem_volume.value;
+  
 	elem_range.textContent = elem_volume.value;
 }, false);
 
@@ -215,6 +285,7 @@ resetButton.addEventListener("click", () => {
   sigusiguPrices = [100];
   itemPowerUps = [5, 50, 500, 5000];
   sigusiguPowerUps = [1];
+  sigusiguPowerbonus = [1];
   document.getElementById("item1Cost").innerText = "10";
   document.getElementById("item2Cost").innerText = "100";
   document.getElementById("item3Cost").innerText = "1000";
@@ -225,6 +296,7 @@ resetButton.addEventListener("click", () => {
   document.getElementById("item3Count").innerText = "0";
   document.getElementById("item4Count").innerText = "0";
   document.getElementById("human1Count").innerText = "0";
+  document.getElementById("sigusiguPowerbonus").innerText = "1.0";
   updateButtonStates();
   saveGameState();
 });
